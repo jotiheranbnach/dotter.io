@@ -1,0 +1,15 @@
+@import "~normalize.css/normalize.css";
+
+.outer-limits {
+    height: 100vh;
+    width: 100vw;
+    background-color: deeppink;
+
+    h1 {
+        color: white;
+        font-size: 15vmin;
+        line-height: 1;
+        margin: 5vmin;
+        position: fixed;
+    }
+}
