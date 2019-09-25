@@ -1,4 +1,6 @@
 import "../assets/scss/styles.css";
+import {Dot} from "./Dot";
+import {Snake} from "./Snake";
 
 class Dotter {
     private static canvas_id: string = 'dotter-canvas';
@@ -8,28 +10,71 @@ class Dotter {
     private outerLimitsElement: HTMLCanvasElement;
     private outerLimitsRect: ClientRect;
     private ctx: CanvasRenderingContext2D;
+    private dots: Dot[][] = [];
+    private rectSize: number;
+    private snake: Snake;
 
     main() {
         this.initDomReferences();
         this.prepareCanvasElement();
         this.initCanvasHandles();
-        this.drawDotGrid();
+        this.runDotExchange();
     }
 
-    drawDotGrid() {
-        let isRed: boolean = false;
-        let maxSquareSize: number = 50;
-        setInterval(() => {
-            for (let i = 0; i < 100; i++) {
-                isRed = Math.random() >= 0.5;
-                let squareSize = Math.random() * maxSquareSize;
-                let x = Math.random() * this.outerLimitsRect.width;
-                let y = Math.random() * this.outerLimitsRect.height;
-                let gb: number = Math.round(Math.random() * 200);
-                this.ctx.fillStyle = 'rgb(' + 80 + ',' + gb + ',' + gb + ')';
-                this.ctx.fillRect(x, y, squareSize, squareSize);
+    generateDots() {
+        let rowHeight: number = this.canvasElement.height / 50;
+        this.rectSize = rowHeight;
+        this.snake = new Snake(50, Math.round(this.canvasElement.width / rowHeight));
+
+        for (let row = 0, y = 0; y < this.canvasElement.height; y += rowHeight, row++) {
+            this.dots[row] = [];
+            for (let column = 0, x = 0; x < this.canvasElement.width; x += this.rectSize, column++) {
+                this.dots[row][column] = new Dot(row, column);
             }
-        }, 1);
+        }
+    }
+
+    drawDots() {
+        this.ctx.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
+        let margin: number = this.rectSize - (this.rectSize * .7);
+
+        for (let row = 0; row < this.dots.length; row++) {
+            for (let column = 0; column < this.dots[0].length; column++) {
+                this.ctx.fillStyle = 'rgb(' + 150 + ',' + 50 + ',' + 50 + ')';
+                this.ctx.fillRect(
+                    (column * this.rectSize) + margin,
+                    (row * this.rectSize) + margin,
+                    this.rectSize - margin,
+                    this.rectSize - margin
+                );
+            }
+        }
+
+        for (let snakePart of this.snake.body) {
+            this.ctx.fillStyle = 'rgb(' + 255 + ',' + 150 + ',' + 150 + ')';
+            this.ctx.fillRect(
+                (snakePart.column * this.rectSize) + margin,
+                (snakePart.row * this.rectSize) + margin,
+                this.rectSize - margin,
+                this.rectSize - margin
+            );
+        }
+    }
+
+    runDotExchange() {
+        this.generateDots();
+        setInterval(() => {
+            this.drawDots();
+
+            // let getRandomBetween = (min: number, max: number) => {
+            //     return Math.round(Math.random() * (max - min) + min);
+            // };
+            // let randomDot: Dot = this.dots[getRandomBetween(0, this.dots.length)][getRandomBetween(0, this.dots[0].length)];
+            // randomDot.isInTransit = true;
+            //
+            // let randomDot2: Dot = this.dots[getRandomBetween(0, this.dots.length)][getRandomBetween(0, this.dots[0].length)];
+            // randomDot2.isInTransit = false;
+        }, 100);
     }
 
     private initDomReferences() {
