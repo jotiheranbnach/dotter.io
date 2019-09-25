@@ -13,19 +13,18 @@ var Dotter = /** @class */ (function () {
     Dotter.prototype.drawDotGrid = function () {
         var _this = this;
         var isRed = false;
-        var maxSquareSize = 100;
+        var maxSquareSize = 50;
         setInterval(function () {
-            for (var i = 0; i < 1000; i++) {
+            for (var i = 0; i < 100; i++) {
                 isRed = Math.random() >= 0.5;
                 var squareSize = Math.random() * maxSquareSize;
                 var x = Math.random() * _this.outerLimitsRect.width;
                 var y = Math.random() * _this.outerLimitsRect.height;
-                var colorGamma = Math.round(Math.random() * 255);
-                _this.ctx.fillStyle = 'rgb(80,' + colorGamma + ',' + colorGamma + ')';
-                ;
+                var gb = Math.round(Math.random() * 200);
+                _this.ctx.fillStyle = 'rgb(' + 80 + ',' + gb + ',' + gb + ')';
                 _this.ctx.fillRect(x, y, squareSize, squareSize);
             }
-        }, 10);
+        }, 1);
     };
     Dotter.prototype.initDomReferences = function () {
         this.canvasElement = document.getElementById(Dotter.canvas_id);

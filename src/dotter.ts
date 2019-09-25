@@ -18,18 +18,18 @@ class Dotter {
 
     drawDotGrid() {
         let isRed: boolean = false;
-        let maxSquareSize: number = 100;
+        let maxSquareSize: number = 50;
         setInterval(() => {
-            for (let i = 0; i < 1000; i++) {
+            for (let i = 0; i < 100; i++) {
                 isRed = Math.random() >= 0.5;
                 let squareSize = Math.random() * maxSquareSize;
                 let x = Math.random() * this.outerLimitsRect.width;
                 let y = Math.random() * this.outerLimitsRect.height;
-                let colorGamma: number = Math.round(Math.random() * 255);
-                this.ctx.fillStyle = 'rgb(80,' + colorGamma + ',' + colorGamma + ')';;
+                let gb: number = Math.round(Math.random() * 200);
+                this.ctx.fillStyle = 'rgb(' + 80 + ',' + gb + ',' + gb + ')';
                 this.ctx.fillRect(x, y, squareSize, squareSize);
             }
-        }, 10);
+        }, 1);
     }
 
     private initDomReferences() {
