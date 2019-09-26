@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("../assets/scss/styles.css");
 var Dot_1 = require("./Dot");
 var Snake_1 = require("./Snake");
+var Ellipse_1 = require("./Ellipse");
 var Dotter = /** @class */ (function () {
     function Dotter() {
         this.dots = [];
@@ -11,7 +12,40 @@ var Dotter = /** @class */ (function () {
         this.initDomReferences();
         this.prepareCanvasElement();
         this.initCanvasHandles();
-        this.runDotExchange();
+        // this.runDotExchange();
+        this.runSpherePulse();
+    };
+    Dotter.prototype.runSpherePulse = function () {
+        var _this = this;
+        var circleDiameter = 600;
+        var r = circleDiameter / 2;
+        var step = 25;
+        var generateEllipses = function () {
+            var result = [];
+            for (var i = step, id = 0; i < circleDiameter; i += step, id++) {
+                var ellipse = new Ellipse_1.Ellipse(i - circleDiameter / 2, 0, step * 1.8, Math.sqrt((r * r) - ((r - i) * (r - i))), id);
+                result.push(ellipse);
+            }
+            return result;
+        };
+        var drawEllipses = function (ellipses) {
+            for (var _i = 0, ellipses_1 = ellipses; _i < ellipses_1.length; _i++) {
+                var ellipse = ellipses_1[_i];
+                ellipse.drawEllipse(_this.ctx);
+            }
+        };
+        var ellipses = generateEllipses();
+        this.ctx.translate(this.canvasElement.width / 2, this.canvasElement.height / 2);
+        this.ctx.rotate(Math.PI * 4 / 3.2);
+        setInterval(function () {
+            _this.ctx.clearRect(-_this.canvasElement.width, -_this.canvasElement.height, _this.canvasElement.width * 2, _this.canvasElement.height * 2);
+            // this.ctx.save();
+            drawEllipses(ellipses);
+            // this.ctx.restore();
+        }, 17);
+    };
+    Dotter.prototype.moveX = function (x, axisLength) {
+        return x + (this.canvasElement.width / 2) - axisLength / 2;
     };
     Dotter.prototype.generateDots = function () {
         var rowHeight = this.canvasElement.height / 50;

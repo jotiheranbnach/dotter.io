@@ -1,6 +1,7 @@
 import "../assets/scss/styles.css";
 import {Dot} from "./Dot";
 import {Snake} from "./Snake";
+import {Ellipse} from "./Ellipse";
 
 class Dotter {
     private static canvas_id: string = 'dotter-canvas';
@@ -18,7 +19,58 @@ class Dotter {
         this.initDomReferences();
         this.prepareCanvasElement();
         this.initCanvasHandles();
-        this.runDotExchange();
+
+        // this.runDotExchange();
+        this.runSpherePulse();
+    }
+
+    private runSpherePulse() {
+        let circleDiameter = 600;
+        let r = circleDiameter / 2;
+        let step = 25;
+
+        let generateEllipses = (): Ellipse[] => {
+            let result: Ellipse[] = [];
+            for (let i = step, id = 0; i < circleDiameter; i += step, id++) {
+                let ellipse: Ellipse = new Ellipse(
+                    i - circleDiameter / 2,
+                    0,
+                    step * 1.8,
+                    Math.sqrt((r * r) - ((r - i) * (r - i))),
+                    id,
+                );
+                result.push(ellipse);
+            }
+            return result;
+        };
+
+        let drawEllipses = (ellipses: Ellipse[]) => {
+            for (let ellipse of ellipses) {
+                ellipse.drawEllipse(this.ctx);
+            }
+        };
+
+        let ellipses: Ellipse[] = generateEllipses();
+
+        this.ctx.translate(this.canvasElement.width / 2, this.canvasElement.height / 2);
+        this.ctx.rotate(Math.PI * 4 / 3.2);
+
+        setInterval(() => {
+            this.ctx.clearRect(
+                -this.canvasElement.width,
+                -this.canvasElement.height,
+                this.canvasElement.width * 2,
+                this.canvasElement.height * 2
+            );
+            // this.ctx.save();
+            drawEllipses(ellipses);
+            // this.ctx.restore();
+        }, 17);
+
+    }
+
+    moveX(x: number, axisLength: number): number {
+        return x + (this.canvasElement.width / 2) - axisLength / 2;
     }
 
     generateDots() {
