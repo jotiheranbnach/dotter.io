@@ -62,9 +62,7 @@ class Dotter {
                 this.canvasElement.width * 2,
                 this.canvasElement.height * 2
             );
-            // this.ctx.save();
             drawEllipses(ellipses);
-            // this.ctx.restore();
         }, 17);
 
     }

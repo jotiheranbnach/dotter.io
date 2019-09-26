@@ -39,9 +39,7 @@ var Dotter = /** @class */ (function () {
         this.ctx.rotate(Math.PI * 4 / 3.2);
         setInterval(function () {
             _this.ctx.clearRect(-_this.canvasElement.width, -_this.canvasElement.height, _this.canvasElement.width * 2, _this.canvasElement.height * 2);
-            // this.ctx.save();
             drawEllipses(ellipses);
-            // this.ctx.restore();
         }, 17);
     };
     Dotter.prototype.moveX = function (x, axisLength) {
